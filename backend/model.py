@@ -7,7 +7,8 @@ from torchvision.transforms import ToTensor
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 
-PATH= os.path.join('../models/', 'cnn_model.pt')
+current_dir = os.path.dirname(os.path.abspath(__file__))
+model_path= os.path.join(current_dir, "..", "models","cnn_model.pt")
 
 def load_data():
     """
@@ -143,7 +144,8 @@ def make_model(n_epochs):
         train_loop(loaders, model, loss_fn, optimizer)
         test_loop(loaders, model, loss_fn)
     print("Done!")
-    torch.save(model, 'models/cnn_model.pt')
+
+    torch.save(model, model_path)
 
 
 def predict_image(image):
@@ -156,7 +158,7 @@ def predict_image(image):
             pred_y: predicted value from CNN
     """
     # Load cnn model
-    model = torch.load('models/cnn_model.pt')
+    model = torch.load(model_path)
     model.eval()
     transform_img = transforms.Compose([transforms.Resize((28,28)), transforms.ToTensor(),])
     image_tensor = transform_img(image).float()
